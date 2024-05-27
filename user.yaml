@@ -1,5 +1,9 @@
 var:
-  last_build_time: 1693411598
-  previously_selected_schema: rime_ice
+  last_build_time: 1716783295
+  option:
+    full_shape: false
+  previously_selected_schema: double_pinyin_flypy
   schema_access_time:
-    rime_ice: 1693408282
+    double_pinyin: 1716776436
+    double_pinyin_flypy: 1716776545
+    rime_ice: 1716776432

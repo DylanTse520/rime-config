@@ -36,16 +36,16 @@ switches:
     states: [ 中, A ]
     reset: 0
   - name: ascii_punct # 中英标点
-    states: [ ¥, $ ]
+    states: [ 。, ． ]
     reset: 0
-  - name: traditionalization
-    states: [ 简, 繁 ]
+  - name: full_shape
+    states: [ 半, 全 ]
     reset: 0
   - name: emoji
     states: [ 💀, 😄 ]
     reset: 1
-  - name: full_shape
-    states: [ 半角, 全角 ]
+  - name: traditionalization
+    states: [ 简, 繁 ]
     reset: 0
 
 
@@ -83,6 +83,7 @@ engine:
     - lua_filter@autocap_filter           # 英文自动大写
     - lua_filter@reduce_english_filter    # 降低部分英语单词在候选项的位置
     - uniquifier                          # 去重
+    - lua_filter@cn_en_spacer             # 中英文之间加空格
 
 
 # Lua 配置: 日期、时间、星期、ISO 8601、时间戳的触发关键字
@@ -119,38 +120,39 @@ translator:
   always_show_comments: true     # corrector.lua ：Rime 默认在 preedit 等于 comment 时取消显示 comment，这里强制一直显示，供 corrector.lua 做判断用。
   initial_quality: 1.2           # 拼音的权重应该比英文大
   preedit_format:                # preedit_format 影响到输入框的显示和“Shift+回车”上屏的字符
-    - xform/([bpmfdtnljqx])n/$1iao/
-    - xform/(\w)g/$1eng/
-    - xform/(\w)q/$1iu/
-    - xform/(\w)w/$1ei/
-    - xform/([dtnlgkhjqxyvuirzcs])r/$1uan/
-    - xform/(\w)t/$1ve/
-    - xform/(\w)y/$1un/
-    - xform/([dtnlgkhvuirzcs])o/$1uo/
-    - xform/(\w)p/$1ie/
-    - xform/([jqx])s/$1iong/
-    - xform/(\w)s/$1ong/
-    - xform/(\w)d/$1ai/
-    - xform/(\w)f/$1en/
-    - xform/(\w)h/$1ang/
-    - xform/(\w)j/$1an/
-    - xform/([gkhvuirzcs])k/$1uai/
-    - xform/(\w)k/$1ing/
-    - xform/([jqxnl])l/$1iang/
-    - xform/(\w)l/$1uang/
-    - xform/(\w)z/$1ou/
-    - xform/([gkhvuirzcs])x/$1ua/
-    - xform/(\w)x/$1ia/
-    - xform/(\w)c/$1ao/
-    - xform/([dtgkhvuirzcs])v/$1ui/
-    - xform/(\w)b/$1in/
-    - xform/(\w)m/$1ian/
-    - xform/([aoe])\1(\w)/$1$2/
-    - "xform/(^|[ '])v/$1zh/"
-    - "xform/(^|[ '])i/$1ch/"
-    - "xform/(^|[ '])u/$1sh/"
-    - xform/([jqxy])v/$1u/
-    - xform/([nl])v/$1ü/
+    {}
+    # - xform/([bpmfdtnljqx])n/$1iao/
+    # - xform/(\w)g/$1eng/
+    # - xform/(\w)q/$1iu/
+    # - xform/(\w)w/$1ei/
+    # - xform/([dtnlgkhjqxyvuirzcs])r/$1uan/
+    # - xform/(\w)t/$1ve/
+    # - xform/(\w)y/$1un/
+    # - xform/([dtnlgkhvuirzcs])o/$1uo/
+    # - xform/(\w)p/$1ie/
+    # - xform/([jqx])s/$1iong/
+    # - xform/(\w)s/$1ong/
+    # - xform/(\w)d/$1ai/
+    # - xform/(\w)f/$1en/
+    # - xform/(\w)h/$1ang/
+    # - xform/(\w)j/$1an/
+    # - xform/([gkhvuirzcs])k/$1uai/
+    # - xform/(\w)k/$1ing/
+    # - xform/([jqxnl])l/$1iang/
+    # - xform/(\w)l/$1uang/
+    # - xform/(\w)z/$1ou/
+    # - xform/([gkhvuirzcs])x/$1ua/
+    # - xform/(\w)x/$1ia/
+    # - xform/(\w)c/$1ao/
+    # - xform/([dtgkhvuirzcs])v/$1ui/
+    # - xform/(\w)b/$1in/
+    # - xform/(\w)m/$1ian/
+    # - xform/([aoe])\1(\w)/$1$2/
+    # - "xform/(^|[ '])v/$1zh/"
+    # - "xform/(^|[ '])i/$1ch/"
+    # - "xform/(^|[ '])u/$1sh/"
+    # - xform/([jqxy])v/$1u/
+    # - xform/([nl])v/$1ü/
 
 
 # 次翻译器，英文
@@ -232,6 +234,8 @@ speller:
   delimiter: " '"  # 第一位<空格>是拼音之间的分隔符；第二位<'>表示可以手动输入单引号来分割拼音。
   algebra:
     - erase/^xx$/
+    - derive/([i])n$/$1ng/
+    - derive/([i])ng$/$1n/
     - derive/^([jqxy])u$/$1v/
     - derive/^([aoe])([ioun])$/$1$1$2/
     - xform/^([aoe])(ng)?$/$1$1$2/
@@ -261,5 +265,5 @@ speller:
     - xform/ui$/Ⓥ/
     - xform/in$/Ⓑ/
     - xlit/ⓆⓌⓇⓉⓎⓊⒾⓄⓅⓈⒹⒻⒼⒽⒿⓀⓁⓏⓍⒸⓋⒷⓃⓂ/qwrtyuiopsdfghjklzxcvbnm/
-    - abbrev/^(.).+$/$1/  # 首字母简拼
+    # - abbrev/^(.).+$/$1/  # 首字母简拼
   
